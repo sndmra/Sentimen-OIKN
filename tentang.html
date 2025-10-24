@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Tentang Dashboard – IKN Sentiment Analysis</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#c7a74a",
+        "background-light": "#ffffff",
+        "background-dark": "#1a1a1a",
+        "text-light": "#333333",
+        "text-dark": "#f0f0f0",
+      },
+      fontFamily: { "sans": ["Inter", "sans-serif"] },
+      boxShadow: {
+        'soft': '0 2px 10px rgba(0,0,0,0.05)',
+        'hover': '0 6px 20px rgba(0,0,0,0.08)',
+      },
+    },
+  },
+}
+</script>
+
+<style>
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* hover underline animasi elegan */
+nav a {
+  position: relative;
+  transition: color 0.25s ease;
+}
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2px;
+  background-color: #c7a74a;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+</style>
+</head>
+
+<body class="bg-background-light font-sans text-text-light">
+<!-- ================= HEADER ================= -->
+<header class="w-full bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-10xl mx-auto px-6 sm:px-8 lg:px-10 flex justify-between items-center py-5">
+    <div class="flex items-center space-x-4">
+      <img alt="Logo IKN" width="80"
+        src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Logo_of_Ibu_Kota_Nusantara.svg"/>
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight">Dashboard Analisis Persepsi Masyarakat di Media Sosial</h1>
+        <p class="text-sm text-gray-500 mt-1">
+          Dibuat oleh <span class="font-medium">Sean Daffa Damara</span> | Direktorat Data dan Kecerdasan Buatan
+        </p>
+      </div>
+    </div>
+
+    <div class="h-8 w-px bg-gray-300 mx-6"></div>
+
+    <nav class="hidden md:flex items-center space-x-8">
+      <a href="index.html" class="text-gray-600 hover:text-primary text-sm font-medium">Dashboard</a>
+      <a href="data.html" class="text-gray-600 hover:text-primary text-sm font-medium">Data</a>
+      <a href="model.html" class="text-gray-600 hover:text-primary text-sm font-medium">Model</a>
+      <a href="tentang.html" class="text-primary font-semibold text-sm">Tentang</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= MAIN CONTENT ================= -->
+<section class="relative overflow-hidden">
+  <!-- Background foto IKN -->
+  <div class="absolute inset-0 bg-[url('IKN_1.jpg')] bg-no-repeat bg-center bg-cover opacity-40 pointer-events-none" style="background-attachment: fixed;"></div>
+  <!-- Gradasi gelap agar teks terbaca -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent backdrop-blur-[2px] pointer-events-none"></div>
+
+  <!-- Konten -->
+  <main class="relative z-10 flex-1 max-w-4xl mx-auto px-6 py-12 text-black">
+    <h2 class="text-2xl font-bold text-primary mb-4">Tentang Dashboard</h2>
+    <p class="text-black-200 mb-6 leading-relaxed">
+      Dashboard ini merupakan bagian dari <b>Aktualisasi Pelatihan Dasar (Latsar) CPNS</b> oleh 
+      <b>Sean Daffa Damara</b> – Analis Data Ilmiah pada <b>Direktorat Data dan Kecerdasan Buatan,
+      Otorita Ibu Kota Nusantara (OIKN)</b>. 
+      Kegiatan ini berfokus pada penerapan nilai-nilai dasar ASN melalui inovasi digital 
+      dalam mendukung <b>transformasi data dan tata kelola cerdas (Smart Governance)</b> di IKN.
+    </p>
+
+    <div class="bg-white/95 shadow-soft rounded-lg p-6 mb-8 text-gray-800 backdrop-blur-sm">
+      <div class="flex items-center mb-3">
+        <span class="material-symbols-outlined text-primary mr-2">flag_circle</span>
+        <h3 class="text-lg font-semibold text-primary">Tujuan</h3>
+      </div>
+      <ul class="list-disc list-inside leading-relaxed">
+        <li>Memantau persepsi dan sentimen masyarakat terhadap pembangunan Ibu Kota Nusantara melalui data media sosial.</li>
+        <li>Mendukung transparansi publik dan komunikasi strategis pemerintah berbasis data digital.</li>
+        <li>Menyediakan data terstruktur untuk pengambilan keputusan yang akuntabel dan berbasis bukti (<em>evidence-based policy</em>).</li>
+        <li>Menumbuhkan budaya kerja adaptif dan inovatif di lingkungan ASN menuju pemerintahan berbasis data.</li>
+      </ul>
+    </div>
+
+    <div class="bg-white/95 shadow-soft rounded-lg p-6 text-gray-800 backdrop-blur-sm">
+      <div class="flex items-center mb-3">
+        <span class="material-symbols-outlined text-primary mr-2">verified</span>
+        <h3 class="text-lg font-semibold text-primary">Nilai Dasar ASN – BerAKHLAK</h3>
+      </div>
+      <p class="mb-4">
+        Dalam pelaksanaan aktualisasi ini, penulis mengimplementasikan nilai-nilai dasar ASN <b>BerAKHLAK</b> sebagai panduan perilaku dan etika kerja:
+      </p>
+      <ul class="list-disc list-inside leading-relaxed">
+        <li><b>Berorientasi Pelayanan</b> – mempermudah akses dan pemantauan data sentimen publik melalui dashboard digital.</li>
+        <li><b>Akuntabel</b> – setiap visualisasi dan analisis data dapat ditelusuri dan dipertanggungjawabkan secara terbuka.</li>
+        <li><b>Kompeten</b> – menerapkan pengetahuan <em>data science</em> dan <em>machine learning</em> dalam sistem analisis sentimen.</li>
+        <li><b>Harmonis</b> – berkolaborasi dengan berbagai pihak untuk memastikan integrasi data dan komunikasi publik yang efektif.</li>
+        <li><b>Loyal</b> – mendukung visi besar pembangunan IKN sebagai simbol peradaban dan kemajuan bangsa.</li>
+        <li><b>Adaptif</b> – memanfaatkan teknologi digital terkini dalam pengelolaan data dan pelaporan.</li>
+        <li><b>Kolaboratif</b> – mendorong kerja sama lintas unit dan pemanfaatan data bersama antar-direktorat di OIKN.</li>
+      </ul>
+    </div>
+
+
+    <div class="bg-gray-50/90 border-primary/100 rounded-lg p-5 mt-8 text-black-1000 border-l-4">
+      <p class="text-sm leading-relaxed">
+        <b>Catatan:</b> Dashboard ini dikembangkan sebagai bukti nyata penerapan nilai ASN <b>BerAKHLAK</b> 
+        dalam kegiatan <b>Aktualisasi Latsar CPNS Tahun 2025</b>, sekaligus mendukung implementasi 
+        <b>Transformasi Digital dan Smart Governance</b> di lingkungan Otorita Ibu Kota Nusantara.
+      </p>
+    </div>
+  </main>
+</section>
+
+<footer class="border-t border-primary py-4 text-center text-gray-500 text-sm bg-white/90 backdrop-blur">
+  © 2025 Sean Daffa Damara – Direktorat Data dan Kecerdasan Buatan
+</footer>
+</body>
+</html>

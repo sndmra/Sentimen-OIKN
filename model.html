@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IKN Sentiment Analysis Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#c7a74a",
+        "background-light": "#ffffff",
+        "text-light": "#333333",
+      },
+      fontFamily: { "sans": ["Inter", "sans-serif"] },
+      boxShadow: {
+        'soft': '0 2px 10px rgba(0,0,0,0.05)',
+      },
+    },
+  },
+}
+</script>
+
+<style>
+nav a {
+  position: relative;
+  transition: color 0.25s ease;
+}
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2px;
+  background-color: #c7a74a;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+}
+</style>
+</head>
+
+<body class="bg-background-light font-sans text-text-light">
+
+<!-- ================= HEADER ================= -->
+<header class="w-full bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-10xl mx-auto px-6 sm:px-8 lg:px-10 flex justify-between items-center py-5">
+    <div class="flex items-center space-x-4">
+      <img alt="Logo IKN" width="80"
+        src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Logo_of_Ibu_Kota_Nusantara.svg"/>
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight">Dashboard Analisis Persepsi Masyarakat di Media Sosial</h1>
+        <p class="text-sm text-gray-500 mt-1">
+          Dibuat oleh <span class="font-medium">Sean Daffa Damara</span> | Direktorat Data dan Kecerdasan Buatan
+        </p>
+      </div>
+    </div>
+
+    <div class="h-8 w-px bg-gray-300 mx-6"></div>
+
+    <nav class="hidden md:flex items-center space-x-8">
+      <a href="index.html" class="text-gray-600 hover:text-primary text-sm font-medium">Dashboard</a>
+      <a href="data.html" class="text-gray-600 hover:text-primary text-sm font-medium">Data</a>
+      <a href="model.html" class="text-primary font-semibold text-sm">Model</a>
+      <a href="tentang.html" class="text-gray-600 hover:text-primary text-sm font-medium">Tentang</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ✅ WRAPPER DENGAN PARALLAX -->
+<section class="relative overflow-hidden">
+  <!-- Background dengan parallax -->
+  <div class="absolute inset-0 bg-[url('IKN_1.jpg')] bg-no-repeat bg-center bg-cover opacity-40 pointer-events-none"
+       style="background-attachment: fixed;"></div>
+
+  <!-- Gradasi hitam transparan agar teks kontras -->
+  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent backdrop-blur-[2px] pointer-events-none"></div>
+
+  <!-- Konten utama -->
+  <main class="relative z-10 flex-1 max-w-4xl mx-auto px-6 py-12 text-black">
+    <h2 class="text-2xl font-bold text-primary mb-3">Model Analisis Sentimen</h2>
+    <p class="text-black-200 mb-8 leading-relaxed">
+      Model ini dibangun menggunakan teknik <strong>machine learning</strong> untuk mengklasifikasikan teks menjadi sentimen 
+      <em>positif</em>, <em>netral</em>, dan <em>negatif</em>.
+    </p>
+
+    <div class="grid gap-6">
+
+      <!-- Contoh kartu -->
+      <div class="bg-white/95 shadow-soft rounded-2xl p-6 border border-gray-100 backdrop-blur-sm">
+        <div class="flex items-center mb-3">
+          <span class="material-symbols-outlined text-primary mr-2">neurology</span>
+          <h3 class="text-lg font-semibold text-primary">Algoritma</h3>
+        </div>
+        <p class="text-gray-700 leading-relaxed">
+          Model menggunakan pendekatan <strong>Logistic Regression</strong> dan <strong>TF-IDF Vectorization</strong> 
+          terhadap teks bersih hasil scraping media sosial.
+        </p>
+      </div>
+
+      <!-- Kartu Evaluasi -->
+      <div class="bg-white shadow-soft rounded-2xl p-6 border border-gray-100 backdrop-blur-sm bg-opacity-95">
+        <div class="flex items-center mb-3">
+          <span class="material-symbols-outlined text-primary mr-2">analytics</span>
+          <h3 class="text-lg font-semibold text-primary">Evaluasi</h3>
+        </div>
+        <ul class="text-gray-700 space-y-1 leading-relaxed">
+          <li><span class="material-symbols-outlined text-gray-400 text-sm align-middle mr-1">check_circle</span> Akurasi: <b>89.2%</b></li>
+          <li><span class="material-symbols-outlined text-gray-400 text-sm align-middle mr-1">check_circle</span> Presisi: <b>87.5%</b></li>
+          <li><span class="material-symbols-outlined text-gray-400 text-sm align-middle mr-1">check_circle</span> Recall: <b>90.3%</b></li>
+          <li><span class="material-symbols-outlined text-gray-400 text-sm align-middle mr-1">check_circle</span> F1-Score: <b>88.9%</b></li>
+        </ul>
+      </div>
+
+      <!-- Kartu Tentang Model -->
+      <div class="bg-white shadow-soft rounded-2xl p-6 border border-gray-100 backdrop-blur-sm bg-opacity-95">
+        <div class="flex items-center mb-3">
+          <span class="material-symbols-outlined text-primary mr-2">robot_2</span>
+          <h3 class="text-lg font-semibold text-primary">Tentang Model Analisis</h3>
+        </div>
+        <p class="text-gray-700 leading-relaxed mb-4">
+          Dashboard ini menggunakan <strong>model analisis sentimen bahasa Indonesia</strong> berbasis 
+          <em>transformer architecture</em> yang dikembangkan oleh <strong>Wilson Wongso (2023)</strong>.  
+          Model ini dilatih menggunakan dataset publik dari media sosial (<b>X/Twitter</b>) untuk mendeteksi polaritas sentimen postingan masyarakat dalam tiga kategori utama:
+        </p>
+        <ul class="text-gray-700 list-disc list-inside mb-4">
+          <li><b class="text-green-600">Positif</b> — teks dengan sentimen positif</li>
+          <li><b class="text-red-600">Negatif</b> — teks dengan sentimen negatif</li>
+          <li><b class="text-blue-600">Netral</b> — teks dengan makna netral atau deskriptif</li>
+        </ul>
+
+        <div class="border-t border-gray-200 my-4"></div>
+
+        <div class="flex items-center mb-2">
+          <span class="material-symbols-outlined text-primary mr-2">book</span>
+          <h4 class="font-semibold text-primary">Detail Teknis Model</h4>
+        </div>
+        <ul class="text-gray-700 leading-relaxed mb-4">
+          <li><b>Nama Model:</b> w11wo/indonesian-roberta-base-sentiment-classifier</li>
+          <li><b>Arsitektur:</b> RoBERTa-base (Bahasa Indonesia)</li>
+          <li><b>Jenis Model:</b> Text Classification</li>
+          <li><b>Bahasa:</b> Bahasa Indonesia 🇮🇩</li>
+          <li><b>Jumlah Label:</b> 3 (Positif, Netral, Negatif)</li>
+          <li><b>Framework:</b> 🤗 Hugging Face Transformers</li>
+          <li><b>Lisensi:</b> MIT License</li>
+        </ul>
+
+        <div class="flex items-center mb-2">
+          <span class="material-symbols-outlined text-primary mr-2">menu_book</span>
+          <h4 class="font-semibold text-primary">Sitasi Model</h4>
+        </div>
+        <pre class="bg-gray-50 text-gray-700 p-4 rounded-lg text-sm overflow-x-auto mb-4">
+@misc{wilson_wongso_2023,
+    author    = {Wilson Wongso},
+    title     = {indonesian-roberta-base-sentiment-classifier (Rev. 3)},
+    year      = {2023},
+    url       = {https://huggingface.co/w11wo/indonesian-roberta-base-sentiment-classifier},
+    doi       = {10.57967/hf/0644},
+    publisher = {Hugging Face}
+}
+        </pre>
+
+        <p class="text-gray-700">
+          <b>Sumber Model:</b> 
+          <a href="https://huggingface.co/w11wo/indonesian-roberta-base-sentiment-classifier" 
+             target="_blank" class="text-primary hover:underline">
+            https://huggingface.co/w11wo/indonesian-roberta-base-sentiment-classifier
+          </a><br/>
+          DOI: <a href="https://doi.org/10.57967/hf/0644" target="_blank" class="text-primary hover:underline">10.57967/hf/0644</a>
+        </p>
+      </div>
+    </div>
+  </main>
+</section>
+
+<footer class="border-t border-primary py-4 text-center text-gray-500 text-sm">
+  © 2025 Sean Daffa Damara – Direktorat Data dan Kecerdasan Buatan
+</footer>
+</body>
+</html>
