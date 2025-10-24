@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>IKN Sentiment Analysis Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#c7a74a",
+        "positive": "#28a745",
+        "neutral": "#007bff",
+        "negative": "#dc3545",
+      },
+      fontFamily: { "sans": ["Inter", "sans-serif"] },
+      boxShadow: {
+        'soft': '0 2px 10px rgba(0,0,0,0.05)',
+        'hover': '0 6px 20px rgba(0,0,0,0.08)',
+      },
+    },
+  },
+}
+</script>
+
+<style>
+nav a {
+  position: relative;
+  transition: color 0.25s ease;
+}
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2px;
+  background-color: #c7a74a;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+nav a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.material-symbols-outlined {
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+</style>
+</head>
+
+<body class="bg-white font-sans text-gray-800">
+
+<!-- ================= HEADER ================= -->
+<header class="w-full bg-white border-b border-gray-200 shadow-sm">
+  <div class="max-w-10xl mx-auto px-6 sm:px-8 lg:px-10 flex justify-between items-center py-5">
+    <div class="flex items-center space-x-4">
+      <img alt="Logo IKN" width="80" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Logo_of_Ibu_Kota_Nusantara.svg"/>
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight">Dashboard Analisis Persepsi Masyarakat di Media Sosial</h1>
+        <p class="text-sm text-gray-500 mt-1">
+          Dibuat oleh <span class="font-medium">Sean Daffa Damara</span> | Direktorat Data dan Kecerdasan Buatan
+        </p>
+      </div>
+    </div>
+    <div class="h-8 w-px bg-gray-300 mx-6"></div>
+    <nav class="hidden md:flex items-center space-x-8">
+      <a href="index.html" class="text-gray-600 hover:text-primary text-sm font-medium">Dashboard</a>
+      <a href="data.html" class="text-primary font-semibold text-sm">Data</a>
+      <a href="model.html" class="text-gray-600 hover:text-primary text-sm font-medium">Model</a>
+      <a href="tentang.html" class="text-gray-600 hover:text-primary text-sm font-medium">Tentang</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= MAIN ================= -->
+<main class="flex-1 max-w-7xl mx-auto px-6 py-10">
+  <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+    <div>
+      <h2 class="text-2xl font-bold text-primary mb-1">Tabel Data Tweet</h2>
+      <p class="text-gray-600">Berikut adalah data hasil pelabelan sentimen masyarakat terhadap pembangunan Ibu Kota Nusantara.</p>
+    </div>
+    <button id="downloadBtn"
+      class="flex items-center gap-2 h-10 px-4 border border-primary text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition">
+      <span class="material-symbols-outlined text-sm">download</span> Unduh CSV
+    </button>
+  </div>
+
+  <!-- Filter dan Search -->
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+    <div class="flex gap-3">
+      <select id="categoryFilter" class="border border-gray-300 rounded-lg px-5 pr-8 py-2 text-sm appearance-none bg-[url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%23333\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'/></svg>')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1rem_auto]">
+        <option value="all">Semua</option>
+        <option value="Positif">Positif</option>
+        <option value="Netral">Netral</option>
+        <option value="Negatif">Negatif</option>
+      </select>
+      <input id="searchInput" type="text" placeholder="Cari teks tweet..." class="border border-gray-300 rounded-lg px-3 py-2 text-sm w-64 focus:ring-primary focus:border-primary"/>
+    </div>
+    <p id="infoRows" class="text-sm text-gray-500"></p>
+  </div>
+
+  <!-- Tabel -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow-soft">
+    <table id="dataTable" class="min-w-full border border-gray-200">
+      <thead class="bg-gray-50">
+        <tr class="text-left text-sm font-semibold text-gray-600 border-b">
+          <th class="px-4 py-3 w-12">#</th>
+          <th class="px-4 py-3">Tanggal</th>
+          <th class="px-4 py-3">Kategori</th>
+          <th class="px-4 py-3">Teks</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 text-sm text-gray-700"></tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-between items-center mt-4 text-sm text-gray-600">
+    <button id="prevPage" class="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40">← Sebelumnya</button>
+    <span id="pageInfo"></span>
+    <button id="nextPage" class="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40">Selanjutnya →</button>
+  </div>
+</main>
+
+<footer class="border-t border-primary py-4 text-center text-gray-500 text-sm">
+  © 2025 Sean Daffa Damara – Direktorat Data dan Kecerdasan Buatan
+</footer>
+
+<!-- ================= SCRIPT ================= -->
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script>
+let allData = [];
+let filteredData = [];
+let currentPage = 1;
+const rowsPerPage = 10;
+
+async function loadTable() {
+  const res = await fetch("data/tweets_ikn_labeled.csv");
+  const text = await res.text();
+  allData = Papa.parse(text, { header: true }).data.filter(d => d.clean_text && d.Kategori);
+  filteredData = [...allData];
+  renderTable();
+}
+
+function renderTable() {
+  const tbody = document.querySelector("#dataTable tbody");
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const dataSlice = filteredData.slice(start, end);
+
+  tbody.innerHTML = dataSlice.map((d, i) => `
+    <tr>
+      <td class="px-4 py-2">${start + i + 1}</td>
+      <td class="px-4 py-2">${d.created_at || '-'}</td>
+      <td class="px-4 py-2 font-semibold ${
+        d.Kategori==='Positif'?'text-green-600':
+        d.Kategori==='Negatif'?'text-red-500':'text-blue-500'
+      }">${d.Kategori}</td>
+      <td class="px-4 py-2">${(d.clean_text || '').slice(0,120)}...</td>
+    </tr>
+  `).join("");
+
+  const pageInfo = document.getElementById("pageInfo");
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
+  
+  document.getElementById("prevPage").disabled = currentPage === 1;
+  document.getElementById("nextPage").disabled = currentPage === totalPages;
+
+  document.getElementById("infoRows").textContent = `Menampilkan ${dataSlice.length} dari ${filteredData.length} data.`;
+}
+
+// Pagination
+document.getElementById("prevPage").addEventListener("click", () => {
+  if (currentPage > 1) { currentPage--; renderTable(); }
+});
+document.getElementById("nextPage").addEventListener("click", () => {
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  if (currentPage < totalPages) { currentPage++; renderTable(); }
+});
+
+// Filter kategori
+document.getElementById("categoryFilter").addEventListener("change", e => {
+  const val = e.target.value;
+  const keyword = document.getElementById("searchInput").value.toLowerCase();
+
+  filteredData = allData.filter(d => {
+    const cocokKategori = val === "all" || d.Kategori === val;
+    const cocokCari = d.clean_text.toLowerCase().includes(keyword);
+    return cocokKategori && cocokCari;
+  });
+
+  currentPage = 1;
+  renderTable();
+});
+
+// Search teks
+document.getElementById("searchInput").addEventListener("input", e => {
+  const keyword = e.target.value.toLowerCase();
+  const selectedCategory = document.getElementById("categoryFilter").value;
+
+  filteredData = allData.filter(d => {
+    const cocokKategori = selectedCategory === "all" || d.Kategori === selectedCategory;
+    const cocokCari = d.clean_text.toLowerCase().includes(keyword);
+    return cocokKategori && cocokCari;
+  });
+
+  currentPage = 1;
+  renderTable();
+});
+
+// Tombol unduh CSV
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = "data/tweets_ikn_labeled.csv";
+  link.download = "tweets_ikn_labeled.csv";
+  link.click();
+});
+
+document.addEventListener("DOMContentLoaded", loadTable);
+</script>
+</body>
+</html>
