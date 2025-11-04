@@ -71,7 +71,7 @@ nav a:hover::after {
     </div>
     <div class="h-8 w-px bg-gray-300 mx-6"></div>
     <nav class="hidden md:flex items-center space-x-8">
-      <a href="index.html" class="text-gray-600 hover:text-primary text-sm font-medium">Dashboard</a>
+      <a href="dashboard.html" class="text-gray-600 hover:text-primary text-sm font-medium">Dashboard</a>
       <a href="data.html" class="text-primary font-semibold text-sm">Data</a>
       <a href="model.html" class="text-gray-600 hover:text-primary text-sm font-medium">Model</a>
       <a href="tentang.html" class="text-gray-600 hover:text-primary text-sm font-medium">Tentang</a>
@@ -121,12 +121,8 @@ nav a:hover::after {
     </table>
   </div>
 
-  <!-- Pagination -->
-  <div class="flex justify-between items-center mt-4 text-sm text-gray-600">
-    <button id="prevPage" class="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40">← Sebelumnya</button>
-    <span id="pageInfo"></span>
-    <button id="nextPage" class="px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40">Selanjutnya →</button>
-  </div>
+  <!-- Pagination (modern compact with First & Last) -->
+  <div id="pagination" class="flex justify-center items-center gap-2 mt-6 text-sm text-gray-700"></div>
 </main>
 
 <footer class="border-t border-primary py-4 text-center text-gray-500 text-sm">
@@ -167,24 +163,66 @@ function renderTable() {
     </tr>
   `).join("");
 
-  const pageInfo = document.getElementById("pageInfo");
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  pageInfo.textContent = `Halaman ${currentPage} dari ${totalPages}`;
-  
-  document.getElementById("prevPage").disabled = currentPage === 1;
-  document.getElementById("nextPage").disabled = currentPage === totalPages;
+  document.getElementById("infoRows").textContent =
+    `Menampilkan ${dataSlice.length} dari ${filteredData.length} data.`;
 
-  document.getElementById("infoRows").textContent = `Menampilkan ${dataSlice.length} dari ${filteredData.length} data.`;
+  const paginationDiv = document.getElementById("pagination");
+  paginationDiv.innerHTML = "";
+
+  // Tombol First
+  const firstBtn = document.createElement("button");
+  firstBtn.textContent = "⏮";
+  firstBtn.className = "px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40";
+  firstBtn.disabled = currentPage === 1;
+  firstBtn.onclick = () => { currentPage = 1; renderTable(); scrollToTop(); };
+  paginationDiv.appendChild(firstBtn);
+
+  // Tombol <
+  const prevBtn = document.createElement("button");
+  prevBtn.textContent = "<";
+  prevBtn.className = "px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40";
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderTable(); scrollToTop(); } };
+  paginationDiv.appendChild(prevBtn);
+
+  // Nomor halaman (maks 5)
+  const maxVisible = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+  if (endPage - startPage < maxVisible - 1) startPage = Math.max(1, endPage - maxVisible + 1);
+
+  for (let i = startPage; i <= endPage; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    btn.className =
+      `px-3 py-1 border rounded transition ${i === currentPage ? 'bg-primary text-white font-semibold' : 'hover:bg-gray-100'}`;
+    btn.onclick = () => { currentPage = i; renderTable(); scrollToTop(); };
+    paginationDiv.appendChild(btn);
+  }
+
+  // Tombol >
+  const nextBtn = document.createElement("button");
+  nextBtn.textContent = ">";
+  nextBtn.className = "px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40";
+  nextBtn.disabled = currentPage === totalPages;
+  nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderTable(); scrollToTop(); } };
+  paginationDiv.appendChild(nextBtn);
+
+  // Tombol Last
+  const lastBtn = document.createElement("button");
+  lastBtn.textContent = "⏭";
+  lastBtn.className = "px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40";
+  lastBtn.disabled = currentPage === totalPages;
+  lastBtn.onclick = () => { currentPage = totalPages; renderTable(); scrollToTop(); };
+  paginationDiv.appendChild(lastBtn);
 }
 
-// Pagination
-document.getElementById("prevPage").addEventListener("click", () => {
-  if (currentPage > 1) { currentPage--; renderTable(); }
-});
-document.getElementById("nextPage").addEventListener("click", () => {
-  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
-  if (currentPage < totalPages) { currentPage++; renderTable(); }
-});
+// Smooth scroll ke atas tabel
+function scrollToTop() {
+  const tableTop = document.querySelector("#dataTable").getBoundingClientRect().top + window.scrollY - 100;
+  window.scrollTo({ top: tableTop, behavior: "smooth" });
+}
 
 // Filter kategori
 document.getElementById("categoryFilter").addEventListener("change", e => {
