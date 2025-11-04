@@ -138,7 +138,7 @@ let currentPage = 1;
 const rowsPerPage = 10;
 
 async function loadTable() {
-  const res = await fetch("data/tweets_ikn_labeled.csv");
+  const res = await fetch("tweets_ikn_labeled.csv");
   const text = await res.text();
   allData = Papa.parse(text, { header: true }).data.filter(d => d.clean_text && d.Kategori);
   filteredData = [...allData];
