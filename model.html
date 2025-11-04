@@ -1,32 +1,35 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
+<html class="light" lang="id">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>IKN Sentiment Analysis Dashboard</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
 <script>
 tailwind.config = {
   darkMode: "class",
   theme: {
     extend: {
       colors: {
-        "primary": "#c7a74a",
+        primary: "#c7a74a",
         "background-light": "#ffffff",
         "text-light": "#333333",
       },
-      fontFamily: { "sans": ["Inter", "sans-serif"] },
+      fontFamily: { sans: ["Inter", "sans-serif"] },
       boxShadow: {
-        'soft': '0 2px 10px rgba(0,0,0,0.05)',
+        soft: "0 2px 10px rgba(0,0,0,0.05)",
+        hover: "0 6px 20px rgba(199,167,74,0.12)",
       },
     },
   },
-}
+};
 </script>
 
 <style>
+/* ====== NAVBAR UNDERLINE ====== */
 nav a {
   position: relative;
   transition: color 0.25s ease;
@@ -47,8 +50,46 @@ nav a:hover::after {
   transform: scaleX(1);
   transform-origin: left;
 }
+
+/* ====== ICON STYLE ====== */
 .material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 500, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
+}
+
+/* ====== CARD STYLE ====== */
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #f0f0f0;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+.card.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.card:hover {
+  box-shadow: 0 6px 20px rgba(199,167,74,0.12);
+  transform: translateY(-2px);
+}
+
+/* ====== STAGGER ANIMATION DELAY ====== */
+.card[data-delay="1"] { transition-delay: 0.2s; }
+.card[data-delay="2"] { transition-delay: 0.4s; }
+.card[data-delay="3"] { transition-delay: 0.6s; }
+
+/* ====== FADE-IN TEXT (title, paragraph) ====== */
+.fade-in {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.8s ease;
+}
+.fade-in.show {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>
 </head>
@@ -72,7 +113,7 @@ nav a:hover::after {
     <div class="h-8 w-px bg-gray-300 mx-6"></div>
 
     <nav class="hidden md:flex items-center space-x-8">
-      <a href="index.html" class="text-gray-600 hover:text-primary text-sm font-medium">Dashboard</a>
+      <a href="dashboard.html" class="text-gray-600 hover:text-primary text-sm font-medium">Dashboard</a>
       <a href="data.html" class="text-gray-600 hover:text-primary text-sm font-medium">Data</a>
       <a href="model.html" class="text-primary font-semibold text-sm">Model</a>
       <a href="tentang.html" class="text-gray-600 hover:text-primary text-sm font-medium">Tentang</a>
@@ -80,27 +121,22 @@ nav a:hover::after {
   </div>
 </header>
 
-<!-- ✅ WRAPPER DENGAN PARALLAX -->
-<section class="relative overflow-hidden">
-  <!-- Background dengan parallax -->
-  <div class="absolute inset-0 bg-[url('IKN_1.jpg')] bg-no-repeat bg-center bg-cover opacity-40 pointer-events-none"
-       style="background-attachment: fixed;"></div>
-
-  <!-- Gradasi hitam transparan agar teks kontras -->
-  <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent backdrop-blur-[2px] pointer-events-none"></div>
+<!-- ================= HERO SECTION ================= -->
+<section class="relative bg-cover bg-center bg-no-repeat" style="background-image: url('IKN_2.jpg');">
+  <!-- Overlay vignette agar tidak bentrok warna -->
+  <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black/90"></div>
 
   <!-- Konten utama -->
-  <main class="relative z-10 flex-1 max-w-4xl mx-auto px-6 py-12 text-black">
-    <h2 class="text-2xl font-bold text-primary mb-3">Model Analisis Sentimen</h2>
-    <p class="text-black-200 mb-8 leading-relaxed">
+  <main class="relative z-10 flex-1 max-w-4xl mx-auto px-6 py-16 text-white">
+    <h2 class="text-2xl font-bold text-primary mb-3 fade-in">Model Analisis Sentimen</h2>
+    <p class="text-gray-100 mb-8 leading-relaxed fade-in">
       Model ini dibangun menggunakan teknik <strong>machine learning</strong> untuk mengklasifikasikan teks menjadi sentimen 
       <em>positif</em>, <em>netral</em>, dan <em>negatif</em>.
     </p>
 
     <div class="grid gap-6">
-
-      <!-- Contoh kartu -->
-      <div class="bg-white/95 shadow-soft rounded-2xl p-6 border border-gray-100 backdrop-blur-sm">
+      <!-- Kartu 1: Algoritma -->
+      <div class="card" data-delay="1">
         <div class="flex items-center mb-3">
           <span class="material-symbols-outlined text-primary mr-2">neurology</span>
           <h3 class="text-lg font-semibold text-primary">Algoritma</h3>
@@ -111,8 +147,8 @@ nav a:hover::after {
         </p>
       </div>
 
-      <!-- Kartu Evaluasi -->
-      <div class="bg-white shadow-soft rounded-2xl p-6 border border-gray-100 backdrop-blur-sm bg-opacity-95">
+      <!-- Kartu 2: Evaluasi -->
+      <div class="card" data-delay="2">
         <div class="flex items-center mb-3">
           <span class="material-symbols-outlined text-primary mr-2">analytics</span>
           <h3 class="text-lg font-semibold text-primary">Evaluasi</h3>
@@ -125,8 +161,8 @@ nav a:hover::after {
         </ul>
       </div>
 
-      <!-- Kartu Tentang Model -->
-      <div class="bg-white shadow-soft rounded-2xl p-6 border border-gray-100 backdrop-blur-sm bg-opacity-95">
+      <!-- Kartu 3: Tentang Model -->
+      <div class="card" data-delay="3">
         <div class="flex items-center mb-3">
           <span class="material-symbols-outlined text-primary mr-2">robot_2</span>
           <h3 class="text-lg font-semibold text-primary">Tentang Model Analisis</h3>
@@ -186,8 +222,26 @@ nav a:hover::after {
   </main>
 </section>
 
-<footer class="border-t border-primary py-4 text-center text-gray-500 text-sm">
+<!-- ================= FOOTER ================= -->
+<footer class="border-t border-primary py-4 text-center text-gray-500 text-sm bg-white/90">
   © 2025 Sean Daffa Damara – Direktorat Data dan Kecerdasan Buatan
 </footer>
+
+<!-- ================= SCROLL ANIMATION SCRIPT ================= -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("show");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll(".card, .fade-in").forEach(el => observer.observe(el));
+});
+</script>
+
 </body>
 </html>
