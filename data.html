@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html class="light" lang="id">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Model Analisis Sentimen IKN</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        primary: "#c7a74a",
+        "background-light": "#ffffff",
+        "text-light": "#333333",
+      },
+      fontFamily: { sans: ["Inter", "sans-serif"] },
+      boxShadow: {
+        soft: "0 2px 10px rgba(0,0,0,0.05)",
+        hover: "0 6px 20px rgba(199,167,74,0.12)",
+      },
+    },
+  },
+};
+</script>
+
+<style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ====== NAVBAR ====== */
+nav a {
+  position: relative;
+  transition: color 0.25s ease, transform 0.2s ease;
+}
+nav a:hover { transform: translateY(-1px); }
+nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2px;
+  background-color: #c7a74a;
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
+}
+
+/* ====== CARD & ANIMASI ====== */
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #f0f0f0;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+.card.show { opacity: 1; transform: translateY(0); }
+.card:hover {
+  box-shadow: 0 6px 20px rgba(199,167,74,0.12);
+  transform: translateY(-2px);
+}
+.card[data-delay="1"] { transition-delay: 0.2s; }
+.card[data-delay="2"] { transition-delay: 0.4s; }
+.card[data-delay="3"] { transition-delay: 0.6s; }
+
+.fade-in {
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(.4,0,.2,1), opacity 0.6s ease;
+  transform: translate3d(0, 10px, 0);
+}
+.fade-in.show { opacity: 1; transform: translateY(0); }
+
+/* ====== HERO ====== */
+.hero-section { position: relative; overflow: hidden; }
+.hero-section::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 70%);
+  z-index: 1;
+}
+#hero-title { text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
+#hero-subtext { text-shadow: 0 2px 8px rgba(0,0,0,0.35); }
+
+pre {
+  font-family: 'Courier New', monospace;
+  background-color: rgba(255,255,255,0.85);
+  border-left: 3px solid #c7a74a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .fade-in { transition: none !important; transform: none !important; }
+}
+</style>
+</head>
+
+<body class="bg-background-light text-gray-800">
+
+<!-- ================= HEADER (FLOATING GLASS) ================= -->
+<header id="mainNav" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-auto transition-all duration-500">
+  <nav class="backdrop-blur-md bg-white/10 border border-white/20 shadow-lg rounded-full px-10 py-3 flex items-center justify-center space-x-8 transition-all duration-500">
+    <a href="dashboard.html" class="nav-link text-gray-200 hover:text-primary text-sm font-medium">Dashboard</a>
+    <div class="h-4 w-px bg-white/30 divider"></div>
+    <a href="data.html" class="nav-link text-primary font-semibold text-sm">Data</a>
+    <div class="h-4 w-px bg-white/30 divider"></div>
+    <a href="model.html" class="nav-link text-gray-200 hover:text-primary text-sm font-medium">Model</a>
+    <div class="h-4 w-px bg-white/30 divider"></div>
+    <a href="tentang.html" class="nav-link text-gray-200 hover:text-primary text-sm font-medium">Tentang</a>
+  </nav>
+</header>
+
+<!-- ================= HERO (agar efek scroll aktif) ================= -->
+<section class="relative h-[60vh] flex flex-col items-center justify-center text-center text-white overflow-hidden">
+  <div class="absolute inset-0 bg-cover bg-center"
+       style="background-image: url('IKN_2.jpg'); background-position: top center;">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/90"></div>
+  </div>
+  <div class="relative z-10 max-w-3xl px-6">
+    <h1 id="hero-title" class="fade-in text-3xl md:text-4xl font-bold text-primary mb-4">
+      Tabel Data Tweet
+    </h1>
+    <p id="hero-subtext" class="fade-in text-gray-100 text-base">
+      Kumpulan data hasil pelabelan sentimen masyarakat terhadap pembangunan Ibu Kota Nusantara.
+    </p>
+  </div>
+</section>
+
+
+<!-- ================= MAIN CONTENT ================= -->
+<main class="flex-1 max-w-7xl mx-auto px-6 py-10">
+  <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
+    <div>
+      <h2 class="text-2xl font-bold text-primary mb-1">Dataset Analisis Sentimen</h2>
+      <p class="text-gray-600">Gunakan filter atau pencarian untuk menelusuri tweet berdasarkan kategori atau kata kunci.</p>
+    </div>
+    <button id="downloadBtn"
+      class="flex items-center gap-2 h-10 px-4 border border-primary text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition">
+      <span class="material-symbols-outlined text-sm">download</span> Unduh CSV
+    </button>
+  </div>
+
+  <!-- Filter dan Search -->
+  <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
+    <div class="flex gap-3">
+      <select id="categoryFilter" class="border border-gray-300 rounded-lg px-5 pr-8 py-2 text-sm">
+        <option value="all">Semua</option>
+        <option value="Positif">Positif</option>
+        <option value="Netral">Netral</option>
+        <option value="Negatif">Negatif</option>
+      </select>
+      <input id="searchInput" type="text" placeholder="Cari teks tweet..." class="border border-gray-300 rounded-lg px-3 py-2 text-sm w-64 focus:ring-primary focus:border-primary"/>
+    </div>
+    <p id="infoRows" class="text-sm text-gray-500"></p>
+  </div>
+
+  <!-- Tabel -->
+  <div class="overflow-x-auto bg-white rounded-lg shadow-soft">
+    <table id="dataTable" class="min-w-full border border-gray-200">
+      <thead class="bg-gray-50">
+        <tr class="text-left text-sm font-semibold text-gray-600 border-b">
+          <th class="px-4 py-3 w-12">#</th>
+          <th class="px-4 py-3">Tanggal</th>
+          <th class="px-4 py-3">Kategori</th>
+          <th class="px-4 py-3">Teks</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 text-sm text-gray-700"></tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div id="pagination" class="flex justify-center items-center gap-2 mt-6 text-sm text-gray-700"></div>
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="border-t border-primary py-4 text-center text-gray-500 text-sm">
+  © 2025 Sean Daffa Damara – Direktorat Data dan Kecerdasan Buatan
+</footer>
+
+<!-- ================= SCRIPT ================= -->
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+<script>
+// ======== DATA TABLE LOGIC ========
+let allData = [];
+let filteredData = [];
+let currentPage = 1;
+const rowsPerPage = 10;
+
+async function loadTable() {
+  const res = await fetch("tweets_ikn_labeled.csv");
+  const text = await res.text();
+  allData = Papa.parse(text, { header: true }).data.filter(d => d.clean_text && d.Kategori);
+  filteredData = [...allData];
+  renderTable();
+}
+
+function renderTable() {
+  const tbody = document.querySelector("#dataTable tbody");
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+  const slice = filteredData.slice(start, end);
+
+  tbody.innerHTML = slice.map((d, i) => `
+    <tr>
+      <td class="px-4 py-2">${start + i + 1}</td>
+      <td class="px-4 py-2">${d.created_at || '-'}</td>
+      <td class="px-4 py-2 font-semibold ${
+        d.Kategori==='Positif'?'text-green-600':
+        d.Kategori==='Negatif'?'text-red-500':'text-blue-500'
+      }">${d.Kategori}</td>
+      <td class="px-4 py-2">${(d.clean_text || '').slice(0,120)}...</td>
+    </tr>
+  `).join("");
+
+  const totalPages = Math.ceil(filteredData.length / rowsPerPage);
+  document.getElementById("infoRows").textContent =
+    `Menampilkan ${slice.length} dari ${filteredData.length} data.`;
+
+  const pagination = document.getElementById("pagination");
+  pagination.innerHTML = "";
+
+  const addButton = (label, disabled, action, active = false) => {
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.className = `px-3 py-1 border rounded transition ${active ? 'bg-primary text-white font-semibold' : 'hover:bg-gray-100'} ${disabled ? 'opacity-40 cursor-not-allowed' : ''}`;
+    btn.disabled = disabled;
+    btn.onclick = action;
+    pagination.appendChild(btn);
+  };
+
+  addButton("⏮", currentPage === 1, () => { currentPage = 1; renderTable(); scrollToTop(); });
+  addButton("<", currentPage === 1, () => { currentPage--; renderTable(); scrollToTop(); });
+
+  const maxVisible = 5;
+  let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+  let endPage = Math.min(totalPages, startPage + maxVisible - 1);
+  if (endPage - startPage < maxVisible - 1) startPage = Math.max(1, endPage - maxVisible + 1);
+
+  for (let i = startPage; i <= endPage; i++)
+    addButton(i, false, () => { currentPage = i; renderTable(); scrollToTop(); }, i === currentPage);
+
+  addButton(">", currentPage === totalPages, () => { currentPage++; renderTable(); scrollToTop(); });
+  addButton("⏭", currentPage === totalPages, () => { currentPage = totalPages; renderTable(); scrollToTop(); });
+}
+
+function scrollToTop() {
+  const top = document.querySelector("main").offsetTop - 80;
+  window.scrollTo({ top, behavior: "smooth" });
+}
+
+document.getElementById("categoryFilter").addEventListener("change", e => {
+  const val = e.target.value;
+  const keyword = document.getElementById("searchInput").value.toLowerCase();
+  filteredData = allData.filter(d => {
+    const matchCat = val === "all" || d.Kategori === val;
+    const matchTxt = d.clean_text.toLowerCase().includes(keyword);
+    return matchCat && matchTxt;
+  });
+  currentPage = 1;
+  renderTable();
+});
+
+document.getElementById("searchInput").addEventListener("input", e => {
+  const keyword = e.target.value.toLowerCase();
+  const val = document.getElementById("categoryFilter").value;
+  filteredData = allData.filter(d => {
+    const matchCat = val === "all" || d.Kategori === val;
+    const matchTxt = d.clean_text.toLowerCase().includes(keyword);
+    return matchCat && matchTxt;
+  });
+  currentPage = 1;
+  renderTable();
+});
+
+document.getElementById("downloadBtn").addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = "tweets_ikn_labeled.csv";
+  link.download = "tweets_ikn_labeled.csv";
+  link.click();
+});
+
+document.addEventListener("DOMContentLoaded", loadTable);
+
+// ======== NAVBAR COLOR CHANGE ON SCROLL ========
+  window.addEventListener("scroll", () => {
+    const nav = document.querySelector("#mainNav nav");
+    const links = document.querySelectorAll("#mainNav .nav-link");
+    const dividers = document.querySelectorAll("#mainNav .divider");
+    const heroHeight = window.innerHeight * 0.5;
+
+    if (window.scrollY > heroHeight) {
+      nav.className = "bg-white/95 border border-gray-200 text-gray-800 shadow-lg rounded-full px-10 py-3 flex items-center justify-center space-x-8 transition-all duration-500";
+      links.forEach(link => {
+        // hanya ubah jika bukan link aktif
+        if (!link.classList.contains("text-primary")) {
+          link.classList.remove("text-gray-200");
+          link.classList.add("text-gray-700");
+        }
+      });
+      dividers.forEach(div => div.classList.replace("bg-white/30", "bg-gray-300"));
+    } else {
+      nav.className = "backdrop-blur-md bg-white/10 border border-white/20 text-white shadow-lg rounded-full px-10 py-3 flex items-center justify-center space-x-8 transition-all duration-500";
+      links.forEach(link => {
+        if (!link.classList.contains("text-primary")) {
+          link.classList.remove("text-gray-700");
+          link.classList.add("text-gray-200");
+        }
+      });
+      dividers.forEach(div => div.classList.replace("bg-gray-300", "bg-white/30"));
+    }
+  });
+
+  // ======== FADE-IN HERO ANIMATION ========
+  document.addEventListener("DOMContentLoaded", () => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll(".fade-in").forEach(el => observer.observe(el));
+  });
+</script>
+</body>
+</html>
