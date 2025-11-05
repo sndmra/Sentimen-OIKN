@@ -1,38 +1,45 @@
 <!DOCTYPE html>
-<html class="light" lang="en">
+<html class="light" lang="id">
 <head>
 <meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>IKN Sentiment Analysis Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Model Analisis Sentimen IKN</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
+
 <script>
 tailwind.config = {
   darkMode: "class",
   theme: {
     extend: {
       colors: {
-        "primary": "#c7a74a",
-        "positive": "#28a745",
-        "neutral": "#007bff",
-        "negative": "#dc3545",
+        primary: "#c7a74a",
+        "background-light": "#ffffff",
+        "text-light": "#333333",
       },
-      fontFamily: { "sans": ["Inter", "sans-serif"] },
+      fontFamily: { sans: ["Inter", "sans-serif"] },
       boxShadow: {
-        'soft': '0 2px 10px rgba(0,0,0,0.05)',
-        'hover': '0 6px 20px rgba(0,0,0,0.08)',
+        soft: "0 2px 10px rgba(0,0,0,0.05)",
+        hover: "0 6px 20px rgba(199,167,74,0.12)",
       },
     },
   },
-}
+};
 </script>
 
 <style>
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ====== NAVBAR ====== */
 nav a {
   position: relative;
-  transition: color 0.25s ease;
+  transition: color 0.25s ease, transform 0.2s ease;
 }
+nav a:hover { transform: translateY(-1px); }
 nav a::after {
   content: "";
   position: absolute;
@@ -45,46 +52,100 @@ nav a::after {
   transform-origin: right;
   transition: transform 0.3s ease;
 }
-nav a:hover::after {
-  transform: scaleX(1);
-  transform-origin: left;
-}
+nav a:hover::after { transform: scaleX(1); transform-origin: left; }
+
 .material-symbols-outlined {
-  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  font-variation-settings: "FILL" 0, "wght" 500, "GRAD" 0, "opsz" 24;
+}
+
+/* ====== CARD & ANIMASI ====== */
+.card {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #f0f0f0;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease;
+}
+.card.show { opacity: 1; transform: translateY(0); }
+.card:hover {
+  box-shadow: 0 6px 20px rgba(199,167,74,0.12);
+  transform: translateY(-2px);
+}
+.card[data-delay="1"] { transition-delay: 0.2s; }
+.card[data-delay="2"] { transition-delay: 0.4s; }
+.card[data-delay="3"] { transition-delay: 0.6s; }
+
+.fade-in {
+  opacity: 0;
+  transition: transform 0.6s cubic-bezier(.4,0,.2,1), opacity 0.6s ease;
+  transform: translate3d(0, 10px, 0);
+}
+.fade-in.show { opacity: 1; transform: translateY(0); }
+
+/* ====== HERO ====== */
+.hero-section { position: relative; overflow: hidden; }
+.hero-section::before {
+  content: "";
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.05) 0%, transparent 70%);
+  z-index: 1;
+}
+#hero-title { text-shadow: 0 2px 10px rgba(0,0,0,0.4); }
+#hero-subtext { text-shadow: 0 2px 8px rgba(0,0,0,0.35); }
+
+pre {
+  font-family: 'Courier New', monospace;
+  background-color: rgba(255,255,255,0.85);
+  border-left: 3px solid #c7a74a;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card, .fade-in { transition: none !important; transform: none !important; }
 }
 </style>
 </head>
 
-<body class="bg-white font-sans text-gray-800">
+<body class="bg-background-light text-gray-800">
 
-<!-- ================= HEADER ================= -->
-<header class="w-full bg-white border-b border-gray-200 shadow-sm">
-  <div class="max-w-10xl mx-auto px-6 sm:px-8 lg:px-10 flex justify-between items-center py-5">
-    <div class="flex items-center space-x-4">
-      <img alt="Logo IKN" width="80" src="https://upload.wikimedia.org/wikipedia/commons/2/2e/Logo_of_Ibu_Kota_Nusantara.svg"/>
-      <div>
-        <h1 class="text-2xl font-bold tracking-tight">Dashboard Analisis Persepsi Masyarakat di Media Sosial</h1>
-        <p class="text-sm text-gray-500 mt-1">
-          Dibuat oleh <span class="font-medium">Sean Daffa Damara</span> | Direktorat Data dan Kecerdasan Buatan
-        </p>
-      </div>
-    </div>
-    <div class="h-8 w-px bg-gray-300 mx-6"></div>
-    <nav class="hidden md:flex items-center space-x-8">
-      <a href="dashboard.html" class="text-gray-600 hover:text-primary text-sm font-medium">Dashboard</a>
-      <a href="data.html" class="text-primary font-semibold text-sm">Data</a>
-      <a href="model.html" class="text-gray-600 hover:text-primary text-sm font-medium">Model</a>
-      <a href="tentang.html" class="text-gray-600 hover:text-primary text-sm font-medium">Tentang</a>
-    </nav>
-  </div>
+<!-- ================= HEADER (FLOATING GLASS) ================= -->
+<header id="mainNav" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-auto transition-all duration-500">
+  <nav class="backdrop-blur-md bg-white/10 border border-white/20 shadow-lg rounded-full px-10 py-3 flex items-center justify-center space-x-8 transition-all duration-500">
+    <a href="dashboard.html" class="nav-link text-gray-200 hover:text-primary text-sm font-medium">Dashboard</a>
+    <div class="h-4 w-px bg-white/30 divider"></div>
+    <a href="data.html" class="nav-link text-primary font-semibold text-sm">Data</a>
+    <div class="h-4 w-px bg-white/30 divider"></div>
+    <a href="model.html" class="nav-link text-gray-200 hover:text-primary text-sm font-medium">Model</a>
+    <div class="h-4 w-px bg-white/30 divider"></div>
+    <a href="tentang.html" class="nav-link text-gray-200 hover:text-primary text-sm font-medium">Tentang</a>
+  </nav>
 </header>
 
-<!-- ================= MAIN ================= -->
+<!-- ================= HERO (agar efek scroll aktif) ================= -->
+<section class="relative h-[60vh] flex flex-col items-center justify-center text-center text-white overflow-hidden">
+  <div class="absolute inset-0 bg-cover bg-center"
+       style="background-image: url('IKN_2.jpg'); background-position: top center;">
+    <div class="absolute inset-0 bg-gradient-to-b from-black/50 via-black/70 to-black/90"></div>
+  </div>
+  <div class="relative z-10 max-w-3xl px-6">
+    <h1 id="hero-title" class="fade-in text-3xl md:text-4xl font-bold text-primary mb-4">
+      Tabel Data Tweet
+    </h1>
+    <p id="hero-subtext" class="fade-in text-gray-100 text-base">
+      Kumpulan data hasil pelabelan sentimen masyarakat terhadap pembangunan Ibu Kota Nusantara.
+    </p>
+  </div>
+</section>
+
+
+<!-- ================= MAIN CONTENT ================= -->
 <main class="flex-1 max-w-7xl mx-auto px-6 py-10">
   <div class="flex justify-between items-center mb-6 flex-wrap gap-4">
     <div>
-      <h2 class="text-2xl font-bold text-primary mb-1">Tabel Data Tweet</h2>
-      <p class="text-gray-600">Berikut adalah data hasil pelabelan sentimen masyarakat terhadap pembangunan Ibu Kota Nusantara.</p>
+      <h2 class="text-2xl font-bold text-primary mb-1">Dataset Analisis Sentimen</h2>
+      <p class="text-gray-600">Gunakan filter atau pencarian untuk menelusuri tweet berdasarkan kategori atau kata kunci.</p>
     </div>
     <button id="downloadBtn"
       class="flex items-center gap-2 h-10 px-4 border border-primary text-primary font-bold rounded-lg hover:bg-primary hover:text-white transition">
@@ -95,7 +156,7 @@ nav a:hover::after {
   <!-- Filter dan Search -->
   <div class="flex flex-wrap items-center justify-between gap-4 mb-4">
     <div class="flex gap-3">
-      <select id="categoryFilter" class="border border-gray-300 rounded-lg px-5 pr-8 py-2 text-sm appearance-none bg-[url('data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%23333\'><path stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M19 9l-7 7-7-7\'/></svg>')] bg-no-repeat bg-[right_0.75rem_center] bg-[length:1rem_auto]">
+      <select id="categoryFilter" class="border border-gray-300 rounded-lg px-5 pr-8 py-2 text-sm">
         <option value="all">Semua</option>
         <option value="Positif">Positif</option>
         <option value="Netral">Netral</option>
@@ -121,10 +182,11 @@ nav a:hover::after {
     </table>
   </div>
 
-  <!-- Pagination (modern compact with First & Last) -->
+  <!-- Pagination -->
   <div id="pagination" class="flex justify-center items-center gap-2 mt-6 text-sm text-gray-700"></div>
 </main>
 
+<!-- ================= FOOTER ================= -->
 <footer class="border-t border-primary py-4 text-center text-gray-500 text-sm">
   © 2025 Sean Daffa Damara – Direktorat Data dan Kecerdasan Buatan
 </footer>
@@ -132,6 +194,7 @@ nav a:hover::after {
 <!-- ================= SCRIPT ================= -->
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <script>
+// ======== DATA TABLE LOGIC ========
 let allData = [];
 let filteredData = [];
 let currentPage = 1;
@@ -149,9 +212,9 @@ function renderTable() {
   const tbody = document.querySelector("#dataTable tbody");
   const start = (currentPage - 1) * rowsPerPage;
   const end = start + rowsPerPage;
-  const dataSlice = filteredData.slice(start, end);
+  const slice = filteredData.slice(start, end);
 
-  tbody.innerHTML = dataSlice.map((d, i) => `
+  tbody.innerHTML = slice.map((d, i) => `
     <tr>
       <td class="px-4 py-2">${start + i + 1}</td>
       <td class="px-4 py-2">${d.created_at || '-'}</td>
@@ -165,104 +228,115 @@ function renderTable() {
 
   const totalPages = Math.ceil(filteredData.length / rowsPerPage);
   document.getElementById("infoRows").textContent =
-    `Menampilkan ${dataSlice.length} dari ${filteredData.length} data.`;
+    `Menampilkan ${slice.length} dari ${filteredData.length} data.`;
 
-  const paginationDiv = document.getElementById("pagination");
-  paginationDiv.innerHTML = "";
+  const pagination = document.getElementById("pagination");
+  pagination.innerHTML = "";
 
-  // Tombol First
-  const firstBtn = document.createElement("button");
-  firstBtn.textContent = "⏮";
-  firstBtn.className = "px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40";
-  firstBtn.disabled = currentPage === 1;
-  firstBtn.onclick = () => { currentPage = 1; renderTable(); scrollToTop(); };
-  paginationDiv.appendChild(firstBtn);
+  const addButton = (label, disabled, action, active = false) => {
+    const btn = document.createElement("button");
+    btn.textContent = label;
+    btn.className = `px-3 py-1 border rounded transition ${active ? 'bg-primary text-white font-semibold' : 'hover:bg-gray-100'} ${disabled ? 'opacity-40 cursor-not-allowed' : ''}`;
+    btn.disabled = disabled;
+    btn.onclick = action;
+    pagination.appendChild(btn);
+  };
 
-  // Tombol <
-  const prevBtn = document.createElement("button");
-  prevBtn.textContent = "<";
-  prevBtn.className = "px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40";
-  prevBtn.disabled = currentPage === 1;
-  prevBtn.onclick = () => { if (currentPage > 1) { currentPage--; renderTable(); scrollToTop(); } };
-  paginationDiv.appendChild(prevBtn);
+  addButton("⏮", currentPage === 1, () => { currentPage = 1; renderTable(); scrollToTop(); });
+  addButton("<", currentPage === 1, () => { currentPage--; renderTable(); scrollToTop(); });
 
-  // Nomor halaman (maks 5)
   const maxVisible = 5;
   let startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
   let endPage = Math.min(totalPages, startPage + maxVisible - 1);
   if (endPage - startPage < maxVisible - 1) startPage = Math.max(1, endPage - maxVisible + 1);
 
-  for (let i = startPage; i <= endPage; i++) {
-    const btn = document.createElement("button");
-    btn.textContent = i;
-    btn.className =
-      `px-3 py-1 border rounded transition ${i === currentPage ? 'bg-primary text-white font-semibold' : 'hover:bg-gray-100'}`;
-    btn.onclick = () => { currentPage = i; renderTable(); scrollToTop(); };
-    paginationDiv.appendChild(btn);
-  }
+  for (let i = startPage; i <= endPage; i++)
+    addButton(i, false, () => { currentPage = i; renderTable(); scrollToTop(); }, i === currentPage);
 
-  // Tombol >
-  const nextBtn = document.createElement("button");
-  nextBtn.textContent = ">";
-  nextBtn.className = "px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40";
-  nextBtn.disabled = currentPage === totalPages;
-  nextBtn.onclick = () => { if (currentPage < totalPages) { currentPage++; renderTable(); scrollToTop(); } };
-  paginationDiv.appendChild(nextBtn);
-
-  // Tombol Last
-  const lastBtn = document.createElement("button");
-  lastBtn.textContent = "⏭";
-  lastBtn.className = "px-3 py-1 border rounded hover:bg-gray-100 disabled:opacity-40";
-  lastBtn.disabled = currentPage === totalPages;
-  lastBtn.onclick = () => { currentPage = totalPages; renderTable(); scrollToTop(); };
-  paginationDiv.appendChild(lastBtn);
+  addButton(">", currentPage === totalPages, () => { currentPage++; renderTable(); scrollToTop(); });
+  addButton("⏭", currentPage === totalPages, () => { currentPage = totalPages; renderTable(); scrollToTop(); });
 }
 
-// Smooth scroll ke atas tabel
 function scrollToTop() {
-  const tableTop = document.querySelector("#dataTable").getBoundingClientRect().top + window.scrollY - 100;
-  window.scrollTo({ top: tableTop, behavior: "smooth" });
+  const top = document.querySelector("main").offsetTop - 80;
+  window.scrollTo({ top, behavior: "smooth" });
 }
 
-// Filter kategori
 document.getElementById("categoryFilter").addEventListener("change", e => {
   const val = e.target.value;
   const keyword = document.getElementById("searchInput").value.toLowerCase();
-
   filteredData = allData.filter(d => {
-    const cocokKategori = val === "all" || d.Kategori === val;
-    const cocokCari = d.clean_text.toLowerCase().includes(keyword);
-    return cocokKategori && cocokCari;
+    const matchCat = val === "all" || d.Kategori === val;
+    const matchTxt = d.clean_text.toLowerCase().includes(keyword);
+    return matchCat && matchTxt;
   });
-
   currentPage = 1;
   renderTable();
 });
 
-// Search teks
 document.getElementById("searchInput").addEventListener("input", e => {
   const keyword = e.target.value.toLowerCase();
-  const selectedCategory = document.getElementById("categoryFilter").value;
-
+  const val = document.getElementById("categoryFilter").value;
   filteredData = allData.filter(d => {
-    const cocokKategori = selectedCategory === "all" || d.Kategori === selectedCategory;
-    const cocokCari = d.clean_text.toLowerCase().includes(keyword);
-    return cocokKategori && cocokCari;
+    const matchCat = val === "all" || d.Kategori === val;
+    const matchTxt = d.clean_text.toLowerCase().includes(keyword);
+    return matchCat && matchTxt;
   });
-
   currentPage = 1;
   renderTable();
 });
 
-// Tombol unduh CSV
 document.getElementById("downloadBtn").addEventListener("click", () => {
   const link = document.createElement("a");
-  link.href = "data/tweets_ikn_labeled.csv";
+  link.href = "tweets_ikn_labeled.csv";
   link.download = "tweets_ikn_labeled.csv";
   link.click();
 });
 
 document.addEventListener("DOMContentLoaded", loadTable);
+
+// ======== NAVBAR COLOR CHANGE ON SCROLL ========
+  window.addEventListener("scroll", () => {
+    const nav = document.querySelector("#mainNav nav");
+    const links = document.querySelectorAll("#mainNav .nav-link");
+    const dividers = document.querySelectorAll("#mainNav .divider");
+    const heroHeight = window.innerHeight * 0.5;
+
+    if (window.scrollY > heroHeight) {
+      nav.className = "bg-white/95 border border-gray-200 text-gray-800 shadow-lg rounded-full px-10 py-3 flex items-center justify-center space-x-8 transition-all duration-500";
+      links.forEach(link => {
+        // hanya ubah jika bukan link aktif
+        if (!link.classList.contains("text-primary")) {
+          link.classList.remove("text-gray-200");
+          link.classList.add("text-gray-700");
+        }
+      });
+      dividers.forEach(div => div.classList.replace("bg-white/30", "bg-gray-300"));
+    } else {
+      nav.className = "backdrop-blur-md bg-white/10 border border-white/20 text-white shadow-lg rounded-full px-10 py-3 flex items-center justify-center space-x-8 transition-all duration-500";
+      links.forEach(link => {
+        if (!link.classList.contains("text-primary")) {
+          link.classList.remove("text-gray-700");
+          link.classList.add("text-gray-200");
+        }
+      });
+      dividers.forEach(div => div.classList.replace("bg-gray-300", "bg-white/30"));
+    }
+  });
+
+  // ======== FADE-IN HERO ANIMATION ========
+  document.addEventListener("DOMContentLoaded", () => {
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("show");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2 });
+
+    document.querySelectorAll(".fade-in").forEach(el => observer.observe(el));
+  });
 </script>
 </body>
 </html>
