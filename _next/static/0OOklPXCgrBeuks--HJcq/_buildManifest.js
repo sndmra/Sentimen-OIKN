@@ -1,7 +1,12 @@
 self.__BUILD_MANIFEST = {
   "__rewrites": {
     "afterFiles": [],
-    "beforeFiles": [],
+    "beforeFiles": [
+      {
+        "source": "/Sentimen-OIKN//_next/:path+",
+        "destination": "/Sentimen-OIKN/_next/:path+"
+      }
+    ],
     "fallback": []
   },
   "sortedPages": [
