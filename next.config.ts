@@ -1,11 +1,11 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: "export",
+  output: "export", // ✅ ini yang penting
+  basePath: "/Sentimen-OIKN", // ✅ supaya path di GitHub Pages benar
   images: {
-    unoptimized: true,
+    unoptimized: true, // ✅ untuk static export
   },
-  /* config options here */
 };
 
 export default nextConfig;
