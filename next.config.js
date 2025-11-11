@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: "export",
-  basePath: "/Sentimen-OIKN", // ganti sesuai nama repo GitHub kamu
+  output: 'export',
   images: { unoptimized: true },
-  trailingSlash: true,
+  basePath: '/Sentimen-OIKN',
+  assetPrefix: '/Sentimen-OIKN/',
 }
 
 module.exports = nextConfig
