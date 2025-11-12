@@ -47,75 +47,79 @@ export default function Dashboard() {
   const [periodLabel, setPeriodLabel] = useState("")
   const [gaugeValue, setGaugeValue] = useState(0)
 
-  useEffect(() => {
-    Papa.parse("/data/tweets_ikn_labeled.csv", {
-      download: true,
-      header: true,
-      delimiter: ",",
-      complete: (result) => {
-        const data = result.data.filter(
-          (d: any) => d.Kategori && d.clean_text && d.created_at
-        )
-        data.forEach((d: any) => (d.date = new Date(d.created_at)))
-        data.sort((a: any, b: any) => a.date.getTime() - b.date.getTime())
-        setTweets(data)
+useEffect(() => {
+  // Tentukan basePath sesuai environment
+  const basePath = process.env.NODE_ENV === "production" ? "/Sentimen-OIKN" : "";
 
-        const totalSummary = { positive: 0, neutral: 0, negative: 0 }
-        data.forEach((row: any) => {
-          const s = row.Kategori.toLowerCase()
-          if (s.includes("positif")) totalSummary.positive++
-          else if (s.includes("netral")) totalSummary.neutral++
-          else if (s.includes("negatif")) totalSummary.negative++
-        })
-        setSummary(totalSummary)
+  Papa.parse(`${basePath}/data/tweets_ikn_labeled.csv`, {
+    download: true,
+    header: true,
+    delimiter: ",",
+    complete: (result) => {
+      const data = result.data.filter(
+        (d: any) => d.Kategori && d.clean_text && d.created_at
+      );
+      data.forEach((d: any) => (d.date = new Date(d.created_at)));
+      data.sort((a: any, b: any) => a.date.getTime() - b.date.getTime());
+      setTweets(data);
 
-        const maxDate = new Date(Math.max(...data.map((d: any) => d.date.getTime())))
-        const periode1 = data.filter((d: any) => d.date < maxDate)
-        const periode2 = data.filter((d: any) => d.date <= maxDate)
+      const totalSummary = { positive: 0, neutral: 0, negative: 0 };
+      data.forEach((row: any) => {
+        const s = row.Kategori.toLowerCase();
+        if (s.includes("positif")) totalSummary.positive++;
+        else if (s.includes("netral")) totalSummary.neutral++;
+        else if (s.includes("negatif")) totalSummary.negative++;
+      });
+      setSummary(totalSummary);
 
-        const calc = (arr: any[]) => {
-          const c = { positive: 0, neutral: 0, negative: 0 }
-          arr.forEach((r: any) => {
-            const s = r.Kategori.toLowerCase()
-            if (s.includes("positif")) c.positive++
-            else if (s.includes("netral")) c.neutral++
-            else if (s.includes("negatif")) c.negative++
-          })
-          return c
-        }
+      const maxDate = new Date(Math.max(...data.map((d: any) => d.date.getTime())));
+      const periode1 = data.filter((d: any) => d.date < maxDate);
+      const periode2 = data.filter((d: any) => d.date <= maxDate);
 
-        const p1 = calc(periode1)
-        const p2 = calc(periode2)
-        const share1Total = p1.positive + p1.neutral + p1.negative || 1
-        const share2Total = p2.positive + p2.neutral + p2.negative || 1
-        const share1 = {
-          positive: (p1.positive / share1Total) * 100,
-          neutral: (p1.neutral / share1Total) * 100,
-          negative: (p1.negative / share1Total) * 100,
-        }
-        const share2 = {
-          positive: (p2.positive / share2Total) * 100,
-          neutral: (p2.neutral / share2Total) * 100,
-          negative: (p2.negative / share2Total) * 100,
-        }
-        const delta = {
-          positive: share2.positive - share1.positive,
-          neutral: share2.neutral - share1.neutral,
-          negative: share2.negative - share1.negative,
-        }
-        setChange(delta)
+      const calc = (arr: any[]) => {
+        const c = { positive: 0, neutral: 0, negative: 0 };
+        arr.forEach((r: any) => {
+          const s = r.Kategori.toLowerCase();
+          if (s.includes("positif")) c.positive++;
+          else if (s.includes("netral")) c.neutral++;
+          else if (s.includes("negatif")) c.negative++;
+        });
+        return c;
+      };
 
-        const fmt = (d: Date) =>
-          d.toLocaleDateString("id-ID", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric",
-          })
-        const minDate = new Date(Math.min(...data.map((d: any) => d.date.getTime())))
-        setPeriodLabel(`${fmt(minDate)} ke ${fmt(maxDate)}`)
-      },
-    })
-  }, [])
+      const p1 = calc(periode1);
+      const p2 = calc(periode2);
+      const share1Total = p1.positive + p1.neutral + p1.negative || 1;
+      const share2Total = p2.positive + p2.neutral + p2.negative || 1;
+      const share1 = {
+        positive: (p1.positive / share1Total) * 100,
+        neutral: (p1.neutral / share1Total) * 100,
+        negative: (p1.negative / share1Total) * 100,
+      };
+      const share2 = {
+        positive: (p2.positive / share2Total) * 100,
+        neutral: (p2.neutral / share2Total) * 100,
+        negative: (p2.negative / share2Total) * 100,
+      };
+      const delta = {
+        positive: share2.positive - share1.positive,
+        neutral: share2.neutral - share1.neutral,
+        negative: share2.negative - share1.negative,
+      };
+      setChange(delta);
+
+      const fmt = (d: Date) =>
+        d.toLocaleDateString("id-ID", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+      const minDate = new Date(Math.min(...data.map((d: any) => d.date.getTime())));
+      setPeriodLabel(`${fmt(minDate)} ke ${fmt(maxDate)}`);
+    },
+  });
+}, []);
+
 
   const total = summary.positive + summary.neutral + summary.negative || 1
 
