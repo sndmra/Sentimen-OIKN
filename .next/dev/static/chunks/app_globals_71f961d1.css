@@ -94,12 +94,10 @@
     --color-green-900: #0d542b;
     --color-blue-50: #eff6ff;
     --color-blue-100: #dbeafe;
-    --color-blue-200: #bedbff;
     --color-blue-300: #90c5ff;
     --color-blue-500: #3080ff;
     --color-blue-600: #155dfc;
     --color-blue-700: #1447e6;
-    --color-blue-800: #193cb8;
     --color-gray-50: #f9fafb;
     --color-gray-200: #e5e7eb;
     --color-gray-400: #99a1af;
@@ -163,12 +161,10 @@
       --color-green-900: lab(30.797% -29.6927 17.382);
       --color-blue-50: lab(96.492% -1.14644 -5.11479);
       --color-blue-100: lab(92.0301% -2.24757 -11.6453);
-      --color-blue-200: lab(86.15% -4.04379 -21.0797);
       --color-blue-300: lab(77.5052% -6.4629 -36.42);
       --color-blue-500: lab(54.1736% 13.3369 -74.6839);
       --color-blue-600: lab(44.0605% 29.0279 -86.0352);
       --color-blue-700: lab(36.9089% 35.0961 -85.6872);
-      --color-blue-800: lab(30.2514% 27.7853 -70.2699);
       --color-gray-50: lab(98.2596% -.247031 -.706708);
       --color-gray-200: lab(91.6229% -.159115 -2.26791);
       --color-gray-400: lab(65.9269% -.832707 -8.17473);
@@ -454,10 +450,6 @@
     pointer-events: none;
   }
 
-  .collapse {
-    visibility: collapse;
-  }
-
   .visible {
     visibility: visible;
   }
@@ -536,10 +528,6 @@
 
   .left-2 {
     left: calc(var(--spacing) * 2);
-  }
-
-  .z-10 {
-    z-index: 10;
   }
 
   .z-20 {
@@ -842,10 +830,6 @@
     width: calc(var(--spacing) * 200);
   }
 
-  .w-\[3px\] {
-    width: 3px;
-  }
-
   .w-\[110px\] {
     width: 110px;
   }
@@ -1121,11 +1105,6 @@
     border-radius: var(--radius-xs);
   }
 
-  .rounded-r {
-    border-top-right-radius: .25rem;
-    border-bottom-right-radius: .25rem;
-  }
-
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
@@ -1179,28 +1158,12 @@
     border-color: #e5e5e7;
   }
 
-  .border-blue-100 {
-    border-color: var(--color-blue-100);
-  }
-
-  .border-blue-200 {
-    border-color: var(--color-blue-200);
-  }
-
   .border-blue-300 {
     border-color: var(--color-blue-300);
   }
 
   .border-blue-500 {
     border-color: var(--color-blue-500);
-  }
-
-  .border-blue-600 {
-    border-color: var(--color-blue-600);
-  }
-
-  .border-blue-800 {
-    border-color: var(--color-blue-800);
   }
 
   .border-border\/50 {
@@ -1229,10 +1192,6 @@
     border-color: var(--input);
   }
 
-  .border-primary {
-    border-color: var(--primary);
-  }
-
   .border-red-200 {
     border-color: var(--color-red-200);
   }
@@ -1247,10 +1206,6 @@
 
   .bg-\(--color-bg\) {
     background-color: var(--color-bg);
-  }
-
-  .bg-\[\#2563eb\] {
-    background-color: #2563eb;
   }
 
   .bg-\[\#f5f5f7\] {
@@ -1365,16 +1320,6 @@
 
   .bg-primary {
     background-color: var(--primary);
-  }
-
-  .bg-primary\/10 {
-    background-color: var(--primary);
-  }
-
-  @supports (color: color-mix(in lab, red, red)) {
-    .bg-primary\/10 {
-      background-color: color-mix(in oklab, var(--primary) 10%, transparent);
-    }
   }
 
   .bg-primary\/20 {

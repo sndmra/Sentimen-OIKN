@@ -306,14 +306,16 @@ useEffect(() => {
                   return (
                     <>
                       <p className="mb-1">
-                        Periode <strong>{start}</strong> – <strong>{end}</strong> menunjukkan bahwa
-                        sentimen <strong className="text-green-600">POSITIF</strong> naik{" "}
-                        <strong>{change.positive.toFixed(1)}%</strong>, sedangkan{" "}
-                        <strong className="text-yellow-600">NETRAL</strong> dan{" "}
-                        <strong className="text-red-600">NEGATIF</strong> masing-masing turun{" "}
-                        <strong>
-                          {Math.abs(change.neutral).toFixed(1)}% dan {Math.abs(change.negative).toFixed(1)}%
-                        </strong>.
+                        Periode <strong>{start}</strong> – <strong>{end}</strong> menunjukkan bahwa{" "}
+                        sentimen <strong className="text-green-600">POSITIF</strong>{" "}
+                        {change.positive > 0 ? "naik" : change.positive < 0 ? "turun" : "tetap"}{" "}
+                        <strong>{Math.abs(change.positive).toFixed(1)}%</strong>,{" "}
+                        <strong className="text-yellow-600">NETRAL</strong>{" "}
+                        {change.neutral > 0 ? "naik" : change.neutral < 0 ? "turun" : "tetap"}{" "}
+                        <strong>{Math.abs(change.neutral).toFixed(1)}%</strong>, dan{" "}
+                        <strong className="text-red-600">NEGATIF</strong>{" "}
+                        {change.negative > 0 ? "naik" : change.negative < 0 ? "turun" : "tetap"}{" "}
+                        <strong>{Math.abs(change.negative).toFixed(1)}%</strong>.
                       </p>
                       <p className="mt-1">
                         Opini masyarakat kini{" "}
