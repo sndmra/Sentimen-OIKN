@@ -18,11 +18,14 @@ export function Sidebar() {
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
 
+  // ✅ Gunakan basePath dinamis agar kompatibel di GitHub Pages
+  const basePath = process.env.NODE_ENV === "production" ? "/Sentimen-OIKN" : ""
+
   const menus = [
-    { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-    { name: "Data", href: "/data", icon: Database },
-    { name: "Model", href: "/model", icon: Brain },
-    { name: "Tentang", href: "/tentang", icon: Info },
+    { name: "Dashboard", href: `${basePath}/dashboard`, icon: LayoutDashboard },
+    { name: "Data", href: `${basePath}/data`, icon: Database },
+    { name: "Model", href: `${basePath}/model`, icon: Brain },
+    { name: "Tentang", href: `${basePath}/tentang`, icon: Info },
   ]
 
   return (
@@ -38,7 +41,7 @@ export function Sidebar() {
         {!collapsed ? (
           <div className="flex items-center gap-2">
             <Image
-              src="/img/logo.png"
+              src={`${basePath}/img/logo.png`} // ✅ gunakan basePath di sini juga
               alt="IKN Logo"
               width={32}
               height={32}
@@ -79,7 +82,8 @@ export function Sidebar() {
       >
         {menus.map((menu) => {
           const Icon = menu.icon
-          const active = pathname === menu.href
+          // Sesuaikan path aktif agar cocok di GH Pages
+          const active = pathname === menu.href || pathname === menu.href.replace(basePath, "")
           return (
             <Link
               key={menu.name}
