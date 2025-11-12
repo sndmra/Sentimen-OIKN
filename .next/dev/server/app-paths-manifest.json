@@ -1,0 +1,6 @@
+{
+  "/dashboard/page": "app/dashboard/page.js",
+  "/data/page": "app/data/page.js",
+  "/model/page": "app/model/page.js",
+  "/tentang/page": "app/tentang/page.js"
+}

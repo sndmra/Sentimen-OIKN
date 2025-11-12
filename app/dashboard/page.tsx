@@ -46,6 +46,7 @@ export default function Dashboard() {
   })
   const [periodLabel, setPeriodLabel] = useState("")
   const [gaugeValue, setGaugeValue] = useState(0)
+  const [maxDateLabel, setMaxDateLabel] = useState("")
 
 useEffect(() => {
   // Tentukan basePath sesuai environment
@@ -116,6 +117,7 @@ useEffect(() => {
         });
       const minDate = new Date(Math.min(...data.map((d: any) => d.date.getTime())));
       setPeriodLabel(`${fmt(minDate)} ke ${fmt(maxDate)}`);
+      setMaxDateLabel(fmt(maxDate));
     },
   });
 }, []);
@@ -264,7 +266,7 @@ useEffect(() => {
           <CardHeader className="flex flex-row items-start justify-between pb-0">
             <div>
               <CardTitle className="text-sm font-semibold text-gray-800 mb-3">
-                Total Opini
+                Total Opini Masuk
               </CardTitle>
               <div className="text-4xl font-bold leading-none">
                 <CountUp end={total} duration={1.2} separator="," />
@@ -273,8 +275,8 @@ useEffect(() => {
             <span className="text-xs text-gray-400 font-medium">X/Twitter</span>
           </CardHeader>
           <CardContent className="pt-0">
-            <p className="text-xs text-gray-500">Baris data</p>
-            <p className="text-sm text-gray-700">Data real dari media sosial</p>
+            <p className="text-xs text-gray-500">Per {maxDateLabel}</p>
+            <p className="text-sm text-gray-700">Dari API X/Twitter</p>
           </CardContent>
         </Card>
       </div>
@@ -305,12 +307,12 @@ useEffect(() => {
                     <>
                       <p className="mb-1">
                         Periode <strong>{start}</strong> – <strong>{end}</strong> menunjukkan bahwa
-                        sentimen <strong className="text-green-600">positif</strong> naik{" "}
+                        sentimen <strong className="text-green-600">POSITIF</strong> naik{" "}
                         <strong>{change.positive.toFixed(1)}%</strong>, sedangkan{" "}
-                        <strong className="text-yellow-600">netral</strong> dan{" "}
-                        <strong className="text-red-600">negatif</strong> masing-masing turun{" "}
+                        <strong className="text-yellow-600">NETRAL</strong> dan{" "}
+                        <strong className="text-red-600">NEGATIF</strong> masing-masing turun{" "}
                         <strong>
-                          {Math.abs(change.neutral).toFixed(1)}% / {Math.abs(change.negative).toFixed(1)}%
+                          {Math.abs(change.neutral).toFixed(1)}% dan {Math.abs(change.negative).toFixed(1)}%
                         </strong>.
                       </p>
                       <p className="mt-1">
@@ -384,7 +386,11 @@ useEffect(() => {
                 "otorita","bumn","2028","proyek","jalan","tdk","rakyat","jokowi",
                 "prabowo","bangun","aja","dpr","bandar","internasional","berlokasi", 
                 "kalimantan","kemajuan","mbg","presiden","cepat","kebanggaan", 
-                "infrastruktur"
+                "infrastruktur", "polri", "sumber", "kawasan", "daya", "alam",
+                "menegaskan", "dibiarkan", "tuntas", "aset", "dijaga", "pembangunan",
+                "politik", "whoosh", "kejahatan", "miliar", "berkomitmen", "berantas",
+                "kriminal", "rp100", "udara", "dukung", "penambangan", "denda",
+                "nya", "ekonomi"
               ])
 
               const wordCount: Record<string, number> = {}

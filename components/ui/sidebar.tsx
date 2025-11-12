@@ -18,14 +18,14 @@ export function Sidebar() {
   const pathname = usePathname()
   const [collapsed, setCollapsed] = useState(false)
 
-  // ✅ Gunakan basePath dinamis agar kompatibel di GitHub Pages
+  // ✅ Base path dinamis (untuk localhost & GitHub Pages)
   const basePath = process.env.NODE_ENV === "production" ? "/Sentimen-OIKN" : ""
 
   const menus = [
-    { name: "Dashboard", href: `/dashboard`, icon: LayoutDashboard },
-    { name: "Data", href: `/data`, icon: Database },
-    { name: "Model", href: `/model`, icon: Brain },
-    { name: "Tentang", href: `/tentang`, icon: Info },
+    { name: "Dashboard", href: `${basePath}/dashboard`, icon: LayoutDashboard },
+    { name: "Data", href: `${basePath}/data`, icon: Database },
+    { name: "Model", href: `${basePath}/model`, icon: Brain },
+    { name: "Tentang", href: `${basePath}/tentang`, icon: Info },
   ]
 
   return (
@@ -37,11 +37,10 @@ export function Sidebar() {
     >
       {/* Header (Logo + Toggle) */}
       <div className="flex items-center justify-between h-[61px] px-4 border-b border-[#e5e5e7] bg-[#f5f5f7]">
-        {/* Logo (muncul hanya saat expand) */}
         {!collapsed ? (
           <div className="flex items-center gap-2">
             <Image
-              src={`${basePath}/img/logo.png`} // ✅ gunakan basePath di sini juga
+              src={`${basePath}/img/logo.png`}
               alt="IKN Logo"
               width={32}
               height={32}
@@ -62,7 +61,6 @@ export function Sidebar() {
           </div>
         )}
 
-        {/* Tombol collapse (saat expand) */}
         {!collapsed && (
           <button
             onClick={() => setCollapsed(!collapsed)}
@@ -82,18 +80,24 @@ export function Sidebar() {
       >
         {menus.map((menu) => {
           const Icon = menu.icon
-          // Sesuaikan path aktif agar cocok di GH Pages
-          const active = pathname === menu.href || pathname === menu.href.replace(basePath, "")
+
+          // ✅ Normalisasi path agar cocok di GH Pages & lokal
+          const normalizedPath = pathname.replace(basePath, "")
+          const normalizedHref = menu.href.replace(basePath, "")
+          const isActive =
+            normalizedPath === normalizedHref ||
+            normalizedPath.startsWith(normalizedHref)
+
           return (
             <Link
               key={menu.name}
               href={menu.href}
               className={cn(
                 "flex items-center rounded-md text-sm font-medium transition-colors",
-                active
-                  ? "bg-primary/10 text-primary font-semibold"
+                isActive
+                  ? "bg-blue-100 text-primary font-semibold border-l-4 border-blue-500 pl-[0.6rem]"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                collapsed ? "justify-center p-2" : "gap-3 px-3 py-2"
+                collapsed ? "justify-center p-2 border-none" : "gap-3 px-3 py-2"
               )}
             >
               <Icon size={18} />
