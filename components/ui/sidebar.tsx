@@ -22,7 +22,7 @@ export function Sidebar() {
   const basePath = process.env.NODE_ENV === "production" ? "/Sentimen-OIKN" : ""
 
   const menus = [
-    { name: "Dashboard", href: `/dashboard`, icon: LayoutDashboard },
+    { name: "Analytics", href: `/dashboard`, icon: LayoutDashboard },
     { name: "Data", href: `/data`, icon: Database },
     { name: "Model", href: `/model`, icon: Brain },
     { name: "Tentang", href: `/tentang`, icon: Info },

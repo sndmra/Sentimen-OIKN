@@ -1,3 +1,2 @@
-[00:00:00.581] Server  LOG      ✓ Ready in 427ms
-[00:00:06.660] Browser WARN    Image with src "http://localhost:3000/img/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:05:10.037] Server  LOG      ✓ Compiled in 34ms
+[00:00:00.607] Server  LOG      ✓ Ready in 451ms
+[00:00:06.322] Browser WARN    Image with src "http://localhost:3000/img/logo.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
